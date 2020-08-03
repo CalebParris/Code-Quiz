@@ -67,11 +67,3 @@ body {
     display: grid;
     gap: 10px;
 }
-
-.btn.correct {
-	background-color: green;
-}
-
-.btn.wrong {
-	background-color: red;
-}
