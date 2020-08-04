@@ -49,7 +49,7 @@ body {
     text-align: center;
 }
 
-#answer-buttons, #form, .quiz-controls, .score-controls {
+#answer-buttons, #form, .quiz-controls, #score-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -59,11 +59,11 @@ body {
     display: none !important;
 }
 
-#start-btn, #next-btn {
+#start-btn {
     margin-top: 20px;
 }
 
-#answer-buttons {
+#answer-buttons, #score-container {
     display: grid;
     gap: 10px;
 }

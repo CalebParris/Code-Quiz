@@ -9,14 +9,14 @@
 <body>
     <header class="header">
         <button id="highscore-btn" class="highscore-btn">View Highscores</button>
-        <p id="timer">Time Remaining:</p>
+        <p id="timer" class="hidden">Time Remaining:</p>
     </header>
     <main class="container">
         <h1 id="title">Coding Quiz Challenge</h1>
         <p id="extra-text">Try to answer the following code related questions within the time limit. Keep in mind that incorrect answers will reduce the timer by 10 seconds.</p>
         <section id="question-container" class="hidden">
             <h2 id="question">Question</h2>
-            <div id="answer-buttons" class="grid">
+            <div id="answer-buttons">
                 
             </div>
         </section>
@@ -24,14 +24,14 @@
             <button id="start-btn" class="start-btn btn">Start Quiz</button>
         </section>
         <form id="form" class="hidden">
-            <label for="initials">Enter your Initials:</label>
-            <input type="text" id="initials" name="initials">
+            <label for="fName">Enter your Name:</label>
+            <input type="text" id="fName" name="fName">
             <input type="submit" value="Submit" id="submit-btn" class="btn">
         </form>
-        <section class="score-controls">
-            <button id="back-btn" class="back-btn btn hidden">Go Back</button>
-            <button id="clear-btn" class="clear-btn btn hidden">Clear Scores</button>
+        <section id="score-container" class="hidden">
             <ol id="leaderboard" class="leaderboard"></ol>
+            <button id="back-btn" class="back-btn btn">Go Back</button>
+            <button id="clear-btn" class="clear-btn btn">Clear Scores</button>
         </section>
     </main>
     <script src="script.js"></script>

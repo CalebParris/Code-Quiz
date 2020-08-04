@@ -7,24 +7,41 @@ var fifthChoices = ["Javascript", "console.log", "for loops", "terminal / bash"]
 
 var startBtn = document.querySelector("#start-btn");
 var questionElement = document.querySelector("#question");
-var answerBtnElement = document.querySelector("#answer-buttons");
+var answerBtnElement = document.querySelector("#answer-buttons")
+var timerElement = document.querySelector("#timer");
+var extraTextElement = document.querySelector("#extra-text");
+var titleElement = document.querySelector("#title");
+var scoreBoardElement = document.querySelector("#score-container");
+var highscoreBtn = document.querySelector("#highscore-btn");
+var nameInput = document.querySelector("#fName");
+var submitBtn = document.querySelector("#submit-btn");
+var leaderboardElement = document.querySelector("#leaderboard");
+var backBtn = document.querySelector("#back-btn");
+var clearBtn = document.querySelector("#clear-btn");
+var formElement = document.querySelector("#form");
 
 var questionIndex = 0;
 var score = 0;
+var secondsLeft = 50;
+var timeInterval;
+
 
 startBtn.addEventListener("click", function(){
     startQuiz();
-})
+    setTimer();
+});
 
 function startQuiz(){
-    document.querySelector("#start-btn").setAttribute("class", "hidden");
-    document.querySelector("#highscore-btn").setAttribute("class", "hidden");
-    document.querySelector("#extra-text").setAttribute("class", "hidden");
-    document.querySelector("#question-container").removeAttribute("class", "hidden");
+    document.querySelector("#start-btn").classList.add("hidden");
+    document.querySelector("#highscore-btn").classList.add("hidden");
+    document.querySelector("#extra-text").classList.add("hidden");
+    document.querySelector("#question-container").classList.remove("hidden");
+    document.querySelector("#timer").classList.remove("hidden");
     displayFirstQuestion();
 }
 
 function displayFirstQuestion(){
+    questionIndex = 0;
     questionElement.textContent = questions[questionIndex];
     for (var i = 0; i < firstChoices.length; i++){
         var answerChoices = document.createElement("button");
@@ -33,12 +50,13 @@ function displayFirstQuestion(){
         document.body.children[1].children[2].children[1].appendChild(answerChoices);
         answerChoices.addEventListener("click", function(){
             if (event.target.textContent === "alerts"){
-                score++;
+                score = score + 100;
             } else {
+               secondsLeft = secondsLeft - 10;
                 if (score <= 0){
                     score = 0;
                 } else {
-                    score--;
+                    score = score - 25;
                 }
             }
             resetAnswers();
@@ -63,12 +81,13 @@ function displaySecondQuestion(){
         document.body.children[1].children[2].children[1].appendChild(answerChoices);
         answerChoices.addEventListener("click", function(){
             if (event.target.textContent === "parenthesis"){
-                score++;
+                score = score + 100;
             } else {
+               secondsLeft = secondsLeft - 10;
                 if (score <= 0){
                     score = 0;
                 } else {
-                    score--;
+                    score = score - 25;
                 }
             }
             resetAnswers();
@@ -87,12 +106,13 @@ function displayThirdQuestion(){
         document.body.children[1].children[2].children[1].appendChild(answerChoices);
         answerChoices.addEventListener("click", function(){
             if (event.target.textContent === "all of the above"){
-                score++;
+                score = score + 100;
             } else {
+               secondsLeft = secondsLeft - 10;
                 if (score <= 0){
                     score = 0;
                 } else {
-                    score--;
+                    score = score - 75;
                 }
             }
             resetAnswers();
@@ -111,12 +131,13 @@ function displayFourthQuestion(){
         document.body.children[1].children[2].children[1].appendChild(answerChoices);
         answerChoices.addEventListener("click", function(){
             if (event.target.textContent === "quotes"){
-                score++;
+                score = score + 100;
             } else {
+               secondsLeft = secondsLeft - 10;
                 if (score <= 0){
                     score = 0;
                 } else {
-                    score--;
+                    score = score - 25;
                 }
             }
             resetAnswers();
@@ -135,15 +156,87 @@ function displayFifthQuestion(){
         document.body.children[1].children[2].children[1].appendChild(answerChoices);
         answerChoices.addEventListener("click", function(){
             if (event.target.textContent === "console.log"){
-                score++;
+                score = score + 100;
             } else {
                 if (score <= 0){
                     score = 0;
                 } else {
-                    score--;
+                    score = score - 25;
                 }
             }
-            console.log(score);
+            recordNameScore();
+            resetAnswers();
         });
     }
 }
+
+function setTimer(){
+    timeInterval = setInterval(function(){
+        secondsLeft--;
+        timerElement.textContent = "Time Remaining: " + secondsLeft;
+
+        if (secondsLeft === 0){
+            clearInterval(timeInterval);
+            recordNameScore();
+        }
+    }, 1000);
+}
+
+function recordNameScore(){
+    document.querySelector("#question-container").classList.add("hidden");
+    document.querySelector("#extra-text").classList.remove("hidden");
+    document.querySelector("#form").classList.remove("hidden");
+    document.querySelector("#timer").classList.add("hidden");
+    extraTextElement.textContent = "Your final score is: " + score;
+    clearInterval(timeInterval);
+    formElement.reset();
+}
+
+submitBtn.addEventListener("click", function(event){
+        event.preventDefault();
+        var leaderboardInfo = {
+            name: nameInput.value,
+            points: score
+        };
+        if (leaderboardInfo.name === ""){
+            return false;
+        } else {
+            localStorage.setItem("leaderboardInfo", JSON.stringify(leaderboardInfo));
+
+            var newestScore = JSON.parse(localStorage.getItem("leaderboardInfo"));
+            var scoreList = document.createElement("li");
+            scoreList.textContent = leaderboardInfo.name + " - " + leaderboardInfo.points;
+            document.body.children[1].children[5].children[0].appendChild(scoreList);
+        }
+        leaderboardPage();
+    });
+
+highscoreBtn.addEventListener("click", function(){
+    leaderboardPage();
+});
+
+function leaderboardPage(){
+    document.querySelector("#score-container").classList.remove("hidden");
+    document.querySelector("#highscore-btn").classList.add("hidden");
+    document.querySelector("#start-btn").classList.add("hidden");
+    document.querySelector("#extra-text").classList.add("hidden");
+    document.querySelector("#form").classList.add("hidden");
+    titleElement.textContent = "Highscore Leaderboard";
+}
+
+backBtn.addEventListener("click", function(){
+    document.querySelector("#score-container").classList.add("hidden");
+    document.querySelector("#highscore-btn").classList.remove("hidden");
+    document.querySelector("#start-btn").classList.remove("hidden");
+    document.querySelector("#extra-text").classList.remove("hidden");
+    titleElement.textContent = "Coding Quiz Challenge";
+    extraTextElement.textContent = "Try to answer the following code related questions within the time limit. Keep in mind that incorrect answers will reduce the timer by 10 seconds.";
+});
+
+clearBtn.addEventListener("click", function(){
+    localStorage.clear();
+    while (leaderboardElement.firstChild){
+        leaderboardElement.removeChild(leaderboardElement.firstChild);
+    }
+});
+
